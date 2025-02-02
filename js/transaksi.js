@@ -1,5 +1,8 @@
 document.addEventListener("DOMContentLoaded", async function () {
     const tableBody = document.querySelector(".recentOrders tbody");
+    const dateHeader = document.querySelector(".recentOrders thead td:first-child");
+    let sortAscending = false;
+    let transactionsData = [];
 
     async function fetchData() {
         try {
@@ -7,15 +10,27 @@ document.addEventListener("DOMContentLoaded", async function () {
             if (!response.ok) {
                 throw new Error("Failed to fetch data");
             }
-            const data = await response.json();
-            renderTable(data);
+            transactionsData = await response.json();
+            
+            // Default sort by newest date
+            sortTransactions();
         } catch (error) {
             console.error("Error fetching data:", error);
         }
     }
 
+    function sortTransactions() {
+        transactionsData.sort((a, b) => {
+            return sortAscending 
+                ? new Date(a.tanggal_pesanan) - new Date(b.tanggal_pesanan) 
+                : new Date(b.tanggal_pesanan) - new Date(a.tanggal_pesanan);
+        });
+        renderTable(transactionsData);
+        updateSortIcon();
+    }
+
     function renderTable(transactions) {
-        tableBody.innerHTML = ""; // Clear existing table data
+        tableBody.innerHTML = "";
         transactions.forEach(transaction => {
             const formattedDate = new Date(transaction.tanggal_pesanan).toLocaleDateString("id-ID", {
                 day: "2-digit", month: "long", year: "numeric"
@@ -35,6 +50,10 @@ document.addEventListener("DOMContentLoaded", async function () {
         });
     }
 
+    function updateSortIcon() {
+        dateHeader.innerHTML = `Date <ion-icon name="${sortAscending ? 'caret-down-circle-outline' : 'caret-up-circle-outline'}"></ion-icon>`;
+    }
+
     function getStatusClass(status) {
         switch (status.toLowerCase()) {
             case "pending": return "pending";
@@ -44,6 +63,11 @@ document.addEventListener("DOMContentLoaded", async function () {
             default: return "unknown";
         }
     }
+
+    dateHeader.addEventListener("click", function () {
+        sortAscending = !sortAscending;
+        sortTransactions();
+    });
 
     fetchData();
 });

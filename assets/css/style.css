@@ -537,6 +537,20 @@ form button:hover {
   border: #f00 1px solid;
 }
 
+#datehead {
+  transition: 1.5s;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+#datehead:hover {
+  cursor: pointer;
+  background-color: #201e4325;
+  border-radius: 25px;
+  transition: .2s;
+}
+
 /* ====================== Responsive Design ========================== */
 @media (max-width: 991px) {
   .navigation {
