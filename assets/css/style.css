@@ -266,7 +266,7 @@ body {
 .cardBox .card .numbers {
   position: relative;
   font-weight: 500;
-  font-size: 2.5rem;
+  font-size: 2rem;
   color: var(--blue);
 }
 
@@ -288,6 +288,30 @@ body {
 .cardBox .card:hover .cardName,
 .cardBox .card:hover .iconBx {
   color: var(--white);
+}
+
+.cardBox .crd-orders .numbers,
+.cardBox .crd-orders .cardName,
+.cardBox .crd-orders .iconBx {
+  color: #0056b3;
+}
+
+.cardBox .crd-sold .numbers,
+.cardBox .crd-sold .cardName,
+.cardBox .crd-sold .iconBx {
+  color: #59a700;
+}
+
+.cardBox .crd-return .numbers,
+.cardBox .crd-return .cardName,
+.cardBox .crd-return .iconBx {
+  color: #f50000;
+}
+
+.cardBox .crd-earning .numbers,
+.cardBox .crd-earning .cardName,
+.cardBox .crd-earning .iconBx {
+  color: #ff7700;
 }
 
 /* ================== Order Details List ============== */

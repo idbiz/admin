@@ -3,6 +3,11 @@ document.addEventListener("DOMContentLoaded", async function () {
     const dateHeader = document.querySelector(".recentOrders thead td:first-child");
     const searchInput = document.getElementById("searchInput");
 
+    const ordersCard = document.querySelector(".cardBox .card:nth-child(1) .numbers");
+    const soldCard = document.querySelector(".cardBox .card:nth-child(2) .numbers");
+    const returnCard = document.querySelector(".cardBox .card:nth-child(3) .numbers");
+    const earningsCard = document.querySelector(".cardBox .card:nth-child(4) .numbers");
+
     let sortAscending = false;
     let transactionsData = [];
     let filteredTransactions = [];
@@ -14,9 +19,10 @@ document.addEventListener("DOMContentLoaded", async function () {
                 throw new Error("Failed to fetch data");
             }
             transactionsData = await response.json();
-            
+
             // Default sort by newest date
             sortTransactions();
+            updateCards();
         } catch (error) {
             console.error("Error fetching data:", error);
         }
@@ -77,6 +83,27 @@ document.addEventListener("DOMContentLoaded", async function () {
             transaction.nama_desain.toLowerCase().includes(searchText)
         );
         renderTable(filteredTransactions);
+    }
+
+    // 🔹 Fungsi untuk format angka Earnings ke dalam ribuan, jutaan, dst.
+    function formatCurrency(value) {
+        if (value >= 10000000) return (value / 1000000).toFixed(0) + "jt";
+        if (value >= 1000000) return (value / 1000000).toFixed(1) + "jt";
+        if (value >= 100000) return (value / 1000).toFixed(0) + "rb";
+        return value.toLocaleString(); // Default format angka biasa
+    }
+
+    // 🔹 Fungsi untuk update data cards
+    function updateCards() {
+        const totalOrders = transactionsData.length;
+        const totalSold = transactionsData.filter(t => t.status_pesanan.toLowerCase() === "done").length;
+        const totalReturn = transactionsData.filter(t => t.status_pesanan.toLowerCase() === "return").length;
+        const totalEarnings = transactionsData.reduce((sum, t) => sum + parseInt(t.harga), 0);
+
+        ordersCard.textContent = totalOrders.toLocaleString();
+        soldCard.textContent = totalSold.toLocaleString();
+        returnCard.textContent = totalReturn.toLocaleString();
+        earningsCard.textContent = `Rp ${formatCurrency(totalEarnings)}`;
     }
 
     // Event listener untuk pencarian
