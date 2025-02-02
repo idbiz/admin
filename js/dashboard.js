@@ -1,8 +1,11 @@
 document.addEventListener("DOMContentLoaded", async function () {
     const tableBody = document.querySelector(".recentOrders tbody");
     const dateHeader = document.querySelector(".recentOrders thead td:first-child");
+    const searchInput = document.getElementById("searchInput");
+
     let sortAscending = false;
     let transactionsData = [];
+    let filteredTransactions = [];
 
     async function fetchData() {
         try {
@@ -25,7 +28,9 @@ document.addEventListener("DOMContentLoaded", async function () {
                 ? new Date(a.tanggal_pesanan) - new Date(b.tanggal_pesanan) 
                 : new Date(b.tanggal_pesanan) - new Date(a.tanggal_pesanan);
         });
-        renderTable(transactionsData);
+
+        filteredTransactions = [...transactionsData]; // Simpan data terfilter
+        renderTable(filteredTransactions);
         updateSortIcon();
     }
 
@@ -35,7 +40,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             const formattedDate = new Date(transaction.tanggal_pesanan).toLocaleDateString("id-ID", {
                 day: "2-digit", month: "long", year: "numeric"
             });
-            
+
             const row = document.createElement("tr");
             row.innerHTML = `
                 <td>${formattedDate}</td>
@@ -64,6 +69,20 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
     }
 
+    // 🔍 Fungsi pencarian
+    function searchTransactions() {
+        const searchText = searchInput.value.trim().toLowerCase();
+        filteredTransactions = transactionsData.filter(transaction => 
+            transaction.nama_pemesan.toLowerCase().includes(searchText) || 
+            transaction.nama_desain.toLowerCase().includes(searchText)
+        );
+        renderTable(filteredTransactions);
+    }
+
+    // Event listener untuk pencarian
+    searchInput.addEventListener("input", searchTransactions);
+
+    // Klik header tanggal untuk sorting
     dateHeader.addEventListener("click", function () {
         sortAscending = !sortAscending;
         sortTransactions();
