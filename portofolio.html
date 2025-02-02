@@ -8,6 +8,8 @@
     <title>Dashboard Admin | IdBiz</title>
     <!-- ======= Styles ====== -->
     <link rel="stylesheet" href="assets/css/style.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 </head>
 
 <body>
@@ -78,6 +80,11 @@
                     <ion-icon name="menu-outline"></ion-icon>
                 </div>
 
+                <div class="addbtn" id="addBtn">
+                    <p>New Portofolio</p>
+                    <ion-icon name="add-circle-outline"></ion-icon>
+                </div>
+
                 <div class="user">
                     <img src="./assets/img/pict.jpg" alt="">
                 </div>
@@ -105,8 +112,34 @@
                         </tbody>
                     </table>
                 </div>
-
             </div>
+
+            <!-- ================ Add Portofolio Form Modal ================= -->
+            <div id="portofolioModal" class="modal hidden">
+                <div class="modal-content">
+                    <span class="close" id="closeModal">&times;</span>
+                    <h2>Add New Portofolio</h2>
+                    <form id="portofolioForm">
+                        <label for="nama_desain">Design Name:</label>
+                        <input type="text" id="nama_desain" name="nama_desain" required>
+
+                        <label for="deskripsi">Description:</label>
+                        <textarea id="deskripsi" name="deskripsi" required></textarea>
+
+                        <label for="gambar">Image URL:</label>
+                        <input type="text" id="gambar" name="gambar" required>
+
+                        <label for="kategori">Category:</label>
+                        <input type="text" id="kategori" name="kategori" required>
+
+                        <label for="harga">Price:</label>
+                        <input type="number" id="harga" name="harga" required>
+
+                        <button type="submit">Tambah</button>
+                    </form>
+                </div>
+            </div>
+
         </div>
     </div>
 
@@ -117,6 +150,10 @@
     <!-- ====== ionicons ======= -->
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+    <!-- ====== SweetAlert2 ====== -->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
 </body>
 
 </html>
