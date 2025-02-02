@@ -3,33 +3,20 @@ document.addEventListener("DOMContentLoaded", async function () {
     const dateHeader = document.querySelector(".recentOrders thead td:first-child");
     let sortAscending = false;
     let transactionsData = [];
-    let usersData = [];
 
     async function fetchData() {
         try {
-            const transactionsResponse = await fetch("https://asia-southeast2-awangga.cloudfunctions.net/idbiz/data/transaksi");
-            if (!transactionsResponse.ok) {
-                throw new Error("Failed to fetch transactions");
+            const response = await fetch("https://asia-southeast2-awangga.cloudfunctions.net/idbiz/data/transaksi");
+            if (!response.ok) {
+                throw new Error("Failed to fetch data");
             }
-            transactionsData = await transactionsResponse.json();
-
-            const usersResponse = await fetch("https://asia-southeast2-awangga.cloudfunctions.net/idbiz/auth/users/all");
-            if (!usersResponse.ok) {
-                throw new Error("Failed to fetch users");
-            }
-            const usersJson = await usersResponse.json();
-            usersData = usersJson.user || []; // Pastikan mendapatkan array user
-
+            transactionsData = await response.json();
+            
             // Default sort by newest date
             sortTransactions();
         } catch (error) {
             console.error("Error fetching data:", error);
         }
-    }
-
-    function getUserEmail(namaPemesan) {
-        const user = usersData.find(user => user.name.toLowerCase() === namaPemesan.toLowerCase());
-        return user ? user.email : null;
     }
 
     function sortTransactions() {
@@ -49,14 +36,10 @@ document.addEventListener("DOMContentLoaded", async function () {
                 day: "2-digit", month: "long", year: "numeric"
             });
             
-            const email = getUserEmail(transaction.nama_pemesan);
-            const mailtoLink = email ? `mailto:${email}` : "#";
-            const alertOnClick = email ? "" : "onclick=\"alert('Email not found!')\"";
-            
             const row = document.createElement("tr");
             row.innerHTML = `
                 <td>${formattedDate}</td>
-                <td><a href="${mailtoLink}" ${alertOnClick}>${transaction.nama_pemesan}</a></td>
+                <td>${transaction.nama_pemesan}</td>
                 <td>${transaction.nama_desain}</td>
                 <td>Rp ${parseInt(transaction.harga).toLocaleString()}</td>
                 <td>${transaction.catatan_pesanan}</td>
