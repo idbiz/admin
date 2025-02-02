@@ -63,7 +63,7 @@ body {
 
 .navigation ul li.activated a,
 .navigation ul li.activated {
-  background-color: var(--black2);
+  background-color: var(--white);
   color: var(--blue);
   border-top-left-radius: 30px;
   border-bottom-left-radius: 30px;
@@ -346,6 +346,9 @@ body {
 }
 .details .recentOrders table tbody tr:hover {
   background: var(--blue);
+  color: var(--white);
+}
+.details .recentOrders table tbody tr:hover a{
   color: var(--white);
 }
 .details .recentOrders table tr td {
