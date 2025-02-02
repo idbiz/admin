@@ -61,6 +61,14 @@ body {
   background-color: var(--white);
 }
 
+.navigation ul li.activated a,
+.navigation ul li.activated {
+  background-color: var(--black2);
+  color: var(--blue);
+  border-top-left-radius: 30px;
+  border-bottom-left-radius: 30px;
+}
+
 .navigation ul li:nth-child(1) {
   margin-bottom: 40px;
   pointer-events: none;

@@ -42,7 +42,7 @@
                     </a>
                 </li>
 
-                <li class="activated">
+                <li>
                     <a href="transaksi.html">
                         <span class="icon">
                             <ion-icon name="bag-handle-outline"></ion-icon>
@@ -51,7 +51,7 @@
                     </a>
                 </li>
 
-                <li>
+                <li class="activated">
                     <a href="users.html">
                         <span class="icon">
                             <ion-icon name="people-outline"></ion-icon>
@@ -83,34 +83,32 @@
                 </div>
             </div>
 
-            <!-- ================ Order Details List ================= -->
+            <!-- ================ User Details List ================= -->
             <div class="details">
                 <div class="recentOrders">
                     <div class="cardHeader">
-                        <h2>Recent Orders</h2>
+                        <h2>Users Management</h2>
                     </div>
 
                     <table>
                         <thead>
                             <tr>
-                                <td>Date</td>
-                                <td>Customer</td>
-                                <td>Design Name</td>
-                                <td>Price</td>
-                                <td>Notes</td>
-                                <td>Payment Proof</td>
-                                <td>Status</td>
+                                <td>Name</td>
+                                <td>Phone</td>
+                                <td>Email</td>
+                                <td>Role</td>
+                                <td>Password</td>
+                                <td>Actions</td>
                             </tr>
                         </thead>
                 
-                        <tbody>
+                        <tbody id="usersTable">
                             <!-- Data will be populated dynamically -->
                         </tbody>
                     </table>
                 </div>
-
-                
             </div>
+
         </div>
     </div>
 
@@ -119,7 +117,7 @@
 
     <!-- =========== Scripts =========  -->
     <script src="assets/js/main.js"></script>
-    <script src="js/transaksi.js"></script>
+    <script src="js/users.js"></script>
 
     <!-- ====== ionicons ======= -->
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
