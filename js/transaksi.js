@@ -61,9 +61,24 @@ document.addEventListener("DOMContentLoaded", async function () {
                 <td>Rp ${parseInt(transaction.harga).toLocaleString()}</td>
                 <td>${transaction.catatan_pesanan}</td>
                 <td><a href="${transaction.bukti_pembayaran}" target="_blank">See Receipt</a></td>
-                <td><span class="status ${getStatusClass(transaction.status_pesanan)}">${transaction.status_pesanan}</span></td>
+                <td>
+                    <select class="status-dropdown" data-id="${transaction._id}">
+                        <option value="pending" ${transaction.status_pesanan === "pending" ? "selected" : ""}>Pending</option>
+                        <option value="done" ${transaction.status_pesanan === "done" ? "selected" : ""}>Done</option>
+                        <option value="return" ${transaction.status_pesanan === "return" ? "selected" : ""}>Return</option>
+                    </select>
+                </td>
+                <td><button class="edit-status" onclick="editTransaction('${transaction._id}')"> Save
+                </button></td>
             `;
             tableBody.appendChild(row);
+        });
+
+        document.querySelectorAll(".status-dropdown").forEach(dropdown => {
+            dropdown.addEventListener("change", function () {
+                const transactionId = this.getAttribute("data-id");
+                editTransaction(transactionId, this.value);
+            });
         });
     }
 
@@ -71,13 +86,57 @@ document.addEventListener("DOMContentLoaded", async function () {
         dateHeader.innerHTML = `Date <ion-icon name="${sortAscending ? 'caret-down-circle-outline' : 'caret-up-circle-outline'}"></ion-icon>`;
     }
 
-    function getStatusClass(status) {
-        switch (status.toLowerCase()) {
-            case "pending": return "pending";
-            case "done": return "done";
-            case "return": return "return";
-            case "in progress": return "inProgress";
-            default: return "unknown";
+    async function editTransaction(id, newStatus) {
+        const token = document.cookie.match(/(^| )login=([^;]+)/)?.[2];
+        if (!token) {
+            Swal.fire("Unauthorized", "Please log in first.", "error");
+            return;
+        }
+    
+        // Cari transaksi berdasarkan ID
+        const transaction = transactionsData.find(trx => trx._id === id);
+        if (!transaction) {
+            Swal.fire("Error", "Transaction not found", "error");
+            return;
+        }
+    
+        // Siapkan data yang akan dikirim ke API
+        const payload = {
+            user_id: transaction.user_id || "", // Pastikan ada user_id
+            nama_pemesan: transaction.nama_pemesan,
+            desain_id: transaction.desain_id || "", // Pastikan ada desain_id
+            nama_desain: transaction.nama_desain,
+            harga: transaction.harga,
+            status_pesanan: newStatus, // Status yang dipilih
+            catatan_pesanan: transaction.catatan_pesanan,
+            bukti_pembayaran: transaction.bukti_pembayaran,
+            tanggal_pesanan: transaction.tanggal_pesanan
+        };
+    
+        try {
+            const response = await fetch(`https://asia-southeast2-awangga.cloudfunctions.net/idbiz/update/transaksi?id=${id}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    "login": token
+                },
+                body: JSON.stringify(payload)
+            });
+    
+            const result = await response.json();
+    
+            if (!response.ok) {
+                console.error("API Error Response:", result);
+                throw new Error(result.message || "Failed to update transaction");
+            }
+    
+            Swal.fire("Success", "Transaction status updated successfully", "success").then(() => {
+                fetchData();
+            });
+    
+        } catch (error) {
+            console.error("Error updating transaction:", error);
+            Swal.fire("Error", error.message || "Failed to update transaction", "error");
         }
     }
 
@@ -87,4 +146,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     });
 
     fetchData();
+
+    // Pastikan fungsi editTransaction tersedia secara global
+    window.editTransaction = editTransaction;
 });
