@@ -98,7 +98,11 @@ document.addEventListener("DOMContentLoaded", async function () {
         const totalOrders = transactionsData.length;
         const totalSold = transactionsData.filter(t => t.status_pesanan.toLowerCase() === "done").length;
         const totalReturn = transactionsData.filter(t => t.status_pesanan.toLowerCase() === "return").length;
-        const totalEarnings = transactionsData.reduce((sum, t) => sum + parseInt(t.harga), 0);
+
+        // 🔥 Perbaikan Total Earnings
+        const totalEarnings = transactionsData
+            .filter(t => t.status_pesanan.toLowerCase() !== "return") // Hanya yang bukan "return"
+            .reduce((sum, t) => sum + parseInt(t.harga), 0); // Menjumlahkan harga
 
         ordersCard.textContent = totalOrders.toLocaleString();
         soldCard.textContent = totalSold.toLocaleString();
