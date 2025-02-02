@@ -109,6 +109,35 @@
                 </div>
             </div>
 
+            <!-- ================ Edit User Modal ================= -->
+            <div id="editUserModal" class="modal hidden">
+                <div class="modal-content">
+                    <span class="close" id="closeModal">&times;</span>
+                    <h2 id="modalTitle">Edit User</h2>
+                    <form id="editUserForm">
+                        <label for="editName">Name:</label>
+                        <input type="text" id="editName" name="editName" required>
+
+                        <label for="editPhone">Phone:</label>
+                        <input type="text" id="editPhone" name="editPhone" required>
+
+                        <label for="editEmail">Email:</label>
+                        <input type="email" id="editEmail" name="editEmail" required>
+
+                        <label for="editRole">Role:</label>
+                        <select id="editRole" name="editRole">
+                            <option value="admin">Admin</option>
+                            <option value="user">User</option>
+                        </select>
+
+                        <label for="editPassword">New Password (optional):</label>
+                        <input type="password" id="editPassword" name="editPassword" placeholder="Leave blank to keep current password">
+
+                        <button type="submit">Update</button>
+                    </form>
+                </div>
+            </div>
+
         </div>
     </div>
 

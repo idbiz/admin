@@ -488,7 +488,7 @@ form label {
   margin-top: 10px;
 }
 
-form input, form textarea {
+form input, form textarea, form select {
   padding: 8px;
   margin-top: 5px;
   border: 1px solid #ccc;
