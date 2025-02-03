@@ -19,3 +19,17 @@ toggle.onclick = function () {
   navigation.classList.toggle("active");
   main.classList.toggle("active");
 };
+
+// Cek apakah user sudah login, jika belum tampilkan peringatan dan redirect
+let token = document.cookie.match(/(^| )login=([^;]+)/)?.[2];
+
+if (!token) {
+    Swal.fire({
+        title: "Unauthorized",
+        text: "You need to log in first!",
+        icon: "warning",
+        confirmButtonText: "OK"
+    }).then(() => {
+        window.location.href = "index.html";
+    });
+}
