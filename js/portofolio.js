@@ -3,6 +3,9 @@ document.addEventListener("DOMContentLoaded", async function () {
     const modal = document.getElementById("portofolioModal");
     const modalTitle = document.querySelector("#portofolioModal h2");
     const form = document.getElementById("portofolioForm");
+    const searchInput = document.getElementById("searchInput");
+
+    let portfolios = [];
 
     function getCookie(name) {
         let match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
@@ -28,16 +31,16 @@ document.addEventListener("DOMContentLoaded", async function () {
                 throw new Error(`Failed to fetch data: ${response.status}`);
             }
 
-            const data = await response.json();
-            renderTable(data);
+            portfolios = await response.json();
+            renderTable(portfolios);
         } catch (error) {
             console.error("Error fetching data:", error);
         }
     }
 
-    function renderTable(portfolios) {
+    function renderTable(data) {
         tableBody.innerHTML = "";
-        portfolios.forEach(portfolio => {
+        data.forEach(portfolio => {
             const row = document.createElement("tr");
             row.innerHTML = `
                 <td>${portfolio.nama_desain}</td>
@@ -176,6 +179,17 @@ document.addEventListener("DOMContentLoaded", async function () {
             }
         });
     }
+
+    function searchPortfolio() {
+        const searchText = searchInput.value.trim().toLowerCase();
+        filteredPortfolio = portfolios.filter(portfolio => 
+            portfolio.kategori.toLowerCase().includes(searchText) || 
+            portfolio.nama_desain.toLowerCase().includes(searchText)
+        );
+        renderTable(filteredPortfolio);
+    }
+
+    searchInput.addEventListener("input", searchPortfolio);
 
     document.getElementById("portofolioForm").addEventListener("submit", savePortfolio);
 
