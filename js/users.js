@@ -4,6 +4,9 @@ document.addEventListener("DOMContentLoaded", async function () {
     const modalTitle = document.getElementById("modalTitle");
     const form = document.getElementById("editUserForm");
     const closeModalBtn = document.getElementById("closeModal");
+    const searchInput = document.getElementById("searchInput");
+
+    let users = [];
 
     if (!userTableBody || !modal || !form || !closeModalBtn) {
         console.error("Error: One or more elements not found in the DOM!");
@@ -26,15 +29,16 @@ document.addEventListener("DOMContentLoaded", async function () {
                 throw new Error("Invalid data format: Expected an array under 'user'");
             }
             
+            users = usersData.user.sort((a, b) => a.name.localeCompare(b.name));
             renderUsersTable(usersData.user.sort((a, b) => a.name.localeCompare(b.name)));
         } catch (error) {
             console.error("Error fetching users:", error);
         }
     }
 
-    function renderUsersTable(users) {
+    function renderUsersTable(userList) {
         userTableBody.innerHTML = "";
-        users.forEach(user => {
+        userList.forEach(user => {
             const row = document.createElement("tr");
             row.innerHTML = `
                 <td>${user.name || "-"}</td>
@@ -159,6 +163,18 @@ document.addEventListener("DOMContentLoaded", async function () {
             }
         });
     }
+
+    function searchUser() {
+        const searchText = searchInput.value.trim().toLowerCase();
+        const filteredUsers = users.filter(user => 
+            user.name.toLowerCase().includes(searchText) || 
+            (user.phonenumber && user.phonenumber.toLowerCase().includes(searchText)) || 
+            user.email.toLowerCase().includes(searchText)
+        );
+        renderUsersTable(filteredUsers);
+    }
+
+    searchInput.addEventListener("input", searchUser);
 
     fetchUsers();
     window.editUser = editUser;
