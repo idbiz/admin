@@ -248,7 +248,7 @@ body {
   width: 100%;
   padding: 20px;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   grid-gap: 30px;
 }
 
@@ -283,17 +283,25 @@ body {
 
 .cardBox .card:hover {
   background: var(--blue);
+  transition: .5s;
 }
-.cardBox .card:hover .numbers,
+
+/* .cardBox .card:hover .numbers,
 .cardBox .card:hover .cardName,
 .cardBox .card:hover .iconBx {
   color: var(--white);
-}
+} */
 
 .cardBox .crd-orders .numbers,
 .cardBox .crd-orders .cardName,
 .cardBox .crd-orders .iconBx {
   color: #0056b3;
+}
+
+.cardBox .crd-pending .numbers,
+.cardBox .crd-pending .cardName,
+.cardBox .crd-pending .iconBx {
+  color: #3d9bff;
 }
 
 .cardBox .crd-sold .numbers,
@@ -311,7 +319,7 @@ body {
 .cardBox .crd-earning .numbers,
 .cardBox .crd-earning .cardName,
 .cardBox .crd-earning .iconBx {
-  color: #ff7700;
+  color: #ff9d00;
 }
 
 /* ================== Order Details List ============== */

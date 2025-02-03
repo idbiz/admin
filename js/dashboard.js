@@ -4,9 +4,10 @@ document.addEventListener("DOMContentLoaded", async function () {
     const searchInput = document.getElementById("searchInput");
 
     const ordersCard = document.querySelector(".cardBox .card:nth-child(1) .numbers");
-    const soldCard = document.querySelector(".cardBox .card:nth-child(2) .numbers");
-    const returnCard = document.querySelector(".cardBox .card:nth-child(3) .numbers");
-    const earningsCard = document.querySelector(".cardBox .card:nth-child(4) .numbers");
+    const pendingCard = document.querySelector(".cardBox .card:nth-child(2) .numbers");
+    const soldCard = document.querySelector(".cardBox .card:nth-child(3) .numbers");
+    const returnCard = document.querySelector(".cardBox .card:nth-child(4) .numbers");
+    const earningsCard = document.querySelector(".cardBox .card:nth-child(5) .numbers");
 
     let sortAscending = false;
     let transactionsData = [];
@@ -96,15 +97,17 @@ document.addEventListener("DOMContentLoaded", async function () {
     // 🔹 Fungsi untuk update data cards
     function updateCards() {
         const totalOrders = transactionsData.length;
+        const totalPending = transactionsData.filter(t => t.status_pesanan.toLowerCase() === "pending").length;
         const totalSold = transactionsData.filter(t => t.status_pesanan.toLowerCase() === "done").length;
         const totalReturn = transactionsData.filter(t => t.status_pesanan.toLowerCase() === "return").length;
 
-        // 🔥 Perbaikan Total Earnings
+        // Perbaikan Total Earnings
         const totalEarnings = transactionsData
             .filter(t => t.status_pesanan.toLowerCase() !== "return") // Hanya yang bukan "return"
             .reduce((sum, t) => sum + parseInt(t.harga), 0); // Menjumlahkan harga
 
         ordersCard.textContent = totalOrders.toLocaleString();
+        pendingCard.textContent = totalPending.toLocaleString();
         soldCard.textContent = totalSold.toLocaleString();
         returnCard.textContent = totalReturn.toLocaleString();
         earningsCard.textContent = `Rp ${formatCurrency(totalEarnings)}`;
