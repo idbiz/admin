@@ -30,6 +30,6 @@ if (!token) {
         icon: "warning",
         confirmButtonText: "OK"
     }).then(() => {
-        window.location.href = "index.html";
+        window.location.href = "../index.html";
     });
 }
