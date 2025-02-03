@@ -76,7 +76,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
     }
 
-    // 🔍 Fungsi pencarian
+    // Fungsi pencarian
     function searchTransactions() {
         const searchText = searchInput.value.trim().toLowerCase();
         filteredTransactions = transactionsData.filter(transaction => 

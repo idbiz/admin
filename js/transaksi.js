@@ -1,9 +1,12 @@
 document.addEventListener("DOMContentLoaded", async function () {
     const tableBody = document.querySelector(".recentOrders tbody");
     const dateHeader = document.querySelector(".recentOrders thead td:first-child");
+    const searchInput = document.getElementById("searchInput");
+    
     let sortAscending = false;
     let transactionsData = [];
     let usersData = [];
+    let filteredTransactions = [];
 
     async function fetchData() {
         try {
@@ -86,6 +89,25 @@ document.addEventListener("DOMContentLoaded", async function () {
         dateHeader.innerHTML = `Date <ion-icon name="${sortAscending ? 'caret-down-circle-outline' : 'caret-up-circle-outline'}"></ion-icon>`;
     }
 
+    
+    // Fungsi pencarian
+    function searchTransactions() {
+        const searchText = searchInput.value.trim().toLowerCase();
+
+        filteredTransactions = transactionsData.filter(transaction => {
+            const formattedDate = new Date(transaction.tanggal_pesanan).toLocaleDateString("id-ID", {
+                day: "2-digit", month: "long", year: "numeric"
+            }).toLowerCase();
+
+            return (
+                transaction.nama_pemesan.toLowerCase().includes(searchText) || 
+                transaction.nama_desain.toLowerCase().includes(searchText) ||
+                formattedDate.includes(searchText)
+            );
+        });
+        renderTable(filteredTransactions);
+    }
+
     async function editTransaction(id, newStatus) {
         const token = document.cookie.match(/(^| )login=([^;]+)/)?.[2];
         if (!token) {
@@ -139,6 +161,9 @@ document.addEventListener("DOMContentLoaded", async function () {
             Swal.fire("Error", error.message || "Failed to update transaction", "error");
         }
     }
+
+    // Event listener untuk pencarian
+    searchInput.addEventListener("input", searchTransactions);
 
     dateHeader.addEventListener("click", function () {
         sortAscending = !sortAscending;
