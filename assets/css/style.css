@@ -395,7 +395,7 @@ body {
 .details .recentOrders table tr td:nth-child(3) {
   text-align: center;
 }
-.status.done {
+.status.settlement {
   padding: 8px 12px;
   background: #8de02c;
   color: var(--white);
@@ -411,7 +411,7 @@ body {
   font-size: 14px;
   font-weight: 500;
 }
-.status.return {
+.status.declined {
   padding: 8px 12px;
   background: #f00;
   color: var(--white);

@@ -135,7 +135,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         Swal.fire({
             title: "Are you sure?",
-            text: "This action cannot be undone!",
+            text: "This action cannot be unsettlement!",
             icon: "warning",
             showCancelButton: true,
             confirmButtonText: "Yes, delete it!",

@@ -11,7 +11,6 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     let sortAscending = false;
     let transactionsData = [];
-    let filteredTransactions = [];
 
     async function fetchData() {
         try {
@@ -21,12 +20,15 @@ document.addEventListener("DOMContentLoaded", async function () {
             }
             transactionsData = await response.json();
 
-            // Default sort by newest date
             sortTransactions();
             updateCards();
         } catch (error) {
             console.error("Error fetching data:", error);
         }
+    }
+
+    function formatCurrency(value) {
+        return value.toLocaleString("id-ID");
     }
 
     function sortTransactions() {
@@ -36,8 +38,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                 : new Date(b.tanggal_pesanan) - new Date(a.tanggal_pesanan);
         });
 
-        filteredTransactions = [...transactionsData]; // Simpan data terfilter
-        renderTable(filteredTransactions);
+        renderTable(transactionsData);
         updateSortIcon();
     }
 
@@ -53,7 +54,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                 <td>${formattedDate}</td>
                 <td>${transaction.nama_pemesan}</td>
                 <td>${transaction.nama_desain}</td>
-                <td>Rp ${parseInt(transaction.harga).toLocaleString()}</td>
+                <td>Rp ${formatCurrency(parseInt(transaction.harga))}</td>
                 <td>${transaction.catatan_pesanan}</td>
                 <td><a href="${transaction.bukti_pembayaran}" target="_blank">See Receipt</a></td>
                 <td><span class="status ${getStatusClass(transaction.status_pesanan)}">${transaction.status_pesanan}</span></td>
@@ -69,42 +70,30 @@ document.addEventListener("DOMContentLoaded", async function () {
     function getStatusClass(status) {
         switch (status.toLowerCase()) {
             case "pending": return "pending";
-            case "done": return "done";
-            case "return": return "return";
-            case "in progress": return "inProgress";
+            case "settlement": return "settlement";
+            case "declined": return "declined";
             default: return "unknown";
         }
     }
 
-    // Fungsi pencarian
     function searchTransactions() {
         const searchText = searchInput.value.trim().toLowerCase();
-        filteredTransactions = transactionsData.filter(transaction => 
+        const filteredTransactions = transactionsData.filter(transaction => 
             transaction.nama_pemesan.toLowerCase().includes(searchText) || 
             transaction.nama_desain.toLowerCase().includes(searchText)
         );
         renderTable(filteredTransactions);
     }
 
-    // 🔹 Fungsi untuk format angka Earnings ke dalam ribuan, jutaan, dst.
-    function formatCurrency(value) {
-        if (value >= 10000000) return (value / 1000000).toFixed(0) + "jt";
-        if (value >= 1000000) return (value / 1000000).toFixed(1) + "jt";
-        if (value >= 100000) return (value / 1000).toFixed(0) + "rb";
-        return value.toLocaleString(); // Default format angka biasa
-    }
-
-    // 🔹 Fungsi untuk update data cards
     function updateCards() {
         const totalOrders = transactionsData.length;
         const totalPending = transactionsData.filter(t => t.status_pesanan.toLowerCase() === "pending").length;
-        const totalSold = transactionsData.filter(t => t.status_pesanan.toLowerCase() === "done").length;
-        const totalReturn = transactionsData.filter(t => t.status_pesanan.toLowerCase() === "return").length;
+        const totalSold = transactionsData.filter(t => t.status_pesanan.toLowerCase() === "settlement").length;
+        const totalReturn = transactionsData.filter(t => t.status_pesanan.toLowerCase() === "declined").length;
 
-        // Perbaikan Total Earnings
         const totalEarnings = transactionsData
-            .filter(t => t.status_pesanan.toLowerCase() !== "return") // Hanya yang bukan "return"
-            .reduce((sum, t) => sum + parseInt(t.harga), 0); // Menjumlahkan harga
+            .filter(t => t.status_pesanan.toLowerCase() === "settlement")
+            .reduce((sum, t) => sum + parseInt(t.harga), 0);
 
         ordersCard.textContent = totalOrders.toLocaleString();
         pendingCard.textContent = totalPending.toLocaleString();
@@ -113,10 +102,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         earningsCard.textContent = `Rp ${formatCurrency(totalEarnings)}`;
     }
 
-    // Event listener untuk pencarian
     searchInput.addEventListener("input", searchTransactions);
-
-    // Klik header tanggal untuk sorting
     dateHeader.addEventListener("click", function () {
         sortAscending = !sortAscending;
         sortTransactions();

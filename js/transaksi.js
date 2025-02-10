@@ -66,9 +66,9 @@ document.addEventListener("DOMContentLoaded", async function () {
                 <td><a href="${transaction.bukti_pembayaran}" target="_blank">See Receipt</a></td>
                 <td>
                     <select class="status-dropdown" data-id="${transaction._id}">
-                        <option value="pending" ${transaction.status_pesanan === "pending" ? "selected" : ""}>Pending</option>
-                        <option value="done" ${transaction.status_pesanan === "done" ? "selected" : ""}>Done</option>
-                        <option value="return" ${transaction.status_pesanan === "return" ? "selected" : ""}>Return</option>
+                        <option value="Pending" ${transaction.status_pesanan === "pending" ? "selected" : ""}>Pending</option>
+                        <option value="Settlement" ${transaction.status_pesanan === "settlement" ? "selected" : ""}>Settlement</option>
+                        <option value="Declined" ${transaction.status_pesanan === "declined" ? "selected" : ""}>Declined</option>
                     </select>
                 </td>
                 <td><button class="edit-status" onclick="editTransaction('${transaction._id}')"> Save
